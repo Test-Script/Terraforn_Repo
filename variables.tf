@@ -6,7 +6,7 @@ variable "tenant_id" {}
 variable "prefix" {
   description = "Name prefix for resources"
   type        = string
-  default     = "demo"
+  default     = "Test-RG"
 }
 
 variable "resource_group_name" {
