@@ -1,0 +1,75 @@
+trigger:
+- main
+
+pool:
+  name: Self_Agent_Pool
+
+variables:
+- group: Terraform-Variables
+
+stages:
+
+# ---------------------------
+# Stage 1: Init + Plan
+# ---------------------------
+- stage: TerraformPlan
+  displayName: "Terraform Initialization & Planning"
+  jobs:
+  - job: plan
+    displayName: "Terraform Plan Job"
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.7.5'
+
+    - script: |
+        echo "Initializing Terraform..."
+        terraform init
+      displayName: Terraform Init
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+    - script: |
+        terraform plan -out=tfplan
+      displayName: Terraform Plan
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+    - publish: tfplan
+      artifact: planfile
+
+
+# ---------------------------
+# Stage 2: Apply (Approval Required)
+# ---------------------------
+- stage: TerraformApply
+  displayName: "Terraform Apply Stage"
+  dependsOn: TerraformPlan
+  condition: succeeded()  
+  environment: prod-approval     # Triggers approval gate
+  jobs:
+  - job: apply
+    displayName: "Terraform Apply Job"
+    steps:
+
+    - script: |
+        echo "Downloading plan file..."
+      displayName: "Prepare Apply"
+
+    - download: current
+      artifact: planfile
+
+    - script: |
+        terraform apply -auto-approve tfplan
+      displayName: Terraform Apply
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
