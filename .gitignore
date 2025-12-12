@@ -36,5 +36,6 @@ id_rsa.pub
 *.pem
 *.key
 
-
+# Ignoring the provider.tf file
+provider.tf
 Terraform Setup.txt
