@@ -45,31 +45,31 @@ stages:
       artifact: planfile
 
 
-# ---------------------------
+# -------------------------------------
 # Stage 2: Apply (Approval Required)
-# ---------------------------
+# -------------------------------------
 - stage: TerraformApply
   displayName: "Terraform Apply Stage"
   dependsOn: TerraformPlan
-  condition: succeeded()  
-  environment: prod-approval     # Triggers approval gate
+  condition: succeeded()
+
   jobs:
-  - job: apply
-    displayName: "Terraform Apply Job"
-    steps:
+  - deployment: applyDeployment      # Deployment job enables approvals
+    displayName: "Terraform Apply Deployment Job"
+    environment: prod-approval       # APPROVAL GATE happens here
+    strategy:
+      runOnce:
+        deploy:
+          steps:
 
-    - script: |
-        echo "Downloading plan file..."
-      displayName: "Prepare Apply"
+          - download: current
+            artifact: planfile
 
-    - download: current
-      artifact: planfile
-
-    - script: |
-        terraform apply -auto-approve tfplan
-      displayName: Terraform Apply
-      env:
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+          - script: |
+              terraform apply -auto-approve tfplan
+            displayName: Terraform Apply
+            env:
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
