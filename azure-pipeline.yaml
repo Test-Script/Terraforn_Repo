@@ -38,7 +38,7 @@ stages:
     
 
     - script: |
-        terraform plan -out=tfplan
+        terraform plan -input=false -out=tfplan
       displayName: Terraform Plan
       env:
         ARM_CLIENT_ID: $(ARM_CLIENT_ID)
