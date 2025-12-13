@@ -36,5 +36,13 @@ If it allowed stale plans:
 
 This is a safety feature, not a bug.
 
-=====================================================================================================================
+====================================== Recommended Architecture (Industry Best Practice) =============================
+
+This is how large enterprises and regulated environments operate.
+
+| Pipeline                | Purpose      | Trigger     | Approval          |
+| ----------------------- | ------------ | ----------- | ----------------- |
+| `terraform-ci.yml`      | plan / apply | Auto (main) | Yes               |
+| `terraform-destroy.yml` | destroy only | Manual      | Stronger approval |
+
 

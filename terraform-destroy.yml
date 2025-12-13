@@ -1,0 +1,35 @@
+trigger: none
+
+pool:
+  name: Self_Agent_Pool
+
+variables:
+- group: Terraform-Variables
+
+stages:
+- stage: TerraformDestroy
+  displayName: "Terraform Destroy"
+  jobs:
+  - deployment: destroyDeployment
+    environment: prod-destroy-approval
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: '1.7.5'
+
+          - script: terraform init
+            env:
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+          - script: terraform destroy -auto-approve
+            env:
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
