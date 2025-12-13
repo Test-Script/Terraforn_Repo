@@ -1,0 +1,40 @@
+# # Local terraform state and backups (contains secrets, resource IDs, outputs)
+# terraform.tfstate
+# terraform.tfstate.backup
+
+# # Local crash logs / plan files
+# crash.log
+# *.tfplan
+
+# # CLI local folder + downloaded providers (do NOT commit provider binaries or .terraform)
+.terraform/
+.terraform.lock.hcl
+
+# # Variable files that commonly contain secrets
+# *.tfvars
+# *.tfvars.json
+# override.tf
+# override.tf.json
+# *_override.tf
+# *_override.tf.json
+
+# # Local credentials / SDK auth files you might create
+# *.credentials.json
+# azureCredentials.json
+# sp.json
+# tf-demo-sp-credentials.json
+
+# # OS / editor files
+# .vscode/
+# .idea/
+# .DS_Store
+# Thumbs.db
+
+# # SSH private keys (never commit)
+# id_rsa
+# id_rsa.pub
+# *.pem
+# *.key
+
+# # Ignoring the provider.tf file
+# Terraform Setup.txt
