@@ -7,8 +7,8 @@
 # *.tfplan
 
 # # CLI local folder + downloaded providers (do NOT commit provider binaries or .terraform)
-# .terraform/
-# .terraform.lock.hcl
+.terraform/
+.terraform.lock.hcl
 
 # # Variable files that commonly contain secrets
 # *.tfvars
