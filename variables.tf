@@ -7,7 +7,7 @@ variable "prefix" {
 variable "resource_group_name" {
   description = "Resource Group name"
   type        = string
-  default     = "demo-rg"
+  default     = "Test-RG"
 }
 
 variable "location" {
