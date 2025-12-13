@@ -9,7 +9,6 @@ crash.log
 # CLI local folder + downloaded providers (do NOT commit provider binaries or .terraform)
 .terraform/
 .terraform.lock.hcl
-.terraform\providers\registry.terraform.io\hashicorp\azurerm\4.55.0\windows_386
 
 # Variable files that commonly contain secrets
 *.tfvars
